@@ -83,6 +83,41 @@ class CrudViewHelper extends Helper
     }
 
     /**
+     * Process a single action into an output
+     *
+     * @param string $action The action to process.
+     * @param array $data The raw entity data.
+     * @param array $options Processing options.
+     * @return string
+     */
+    public function processAction($action, Entity $data, array $options = [])
+    {
+        $this->setContext($data);
+
+        $options += ['formatter' => null, 'condition' => null];
+
+        if ($options['condition'] && $options['condition']($this->getContext(), $options)) {
+            return;
+        }
+
+        if ($options['formatter'] === 'element') {
+            $options += ['element' => 'action'];
+            $context = $this->getContext();
+            return $this->_View->element($options['element'], compact('context', 'action', 'options'));
+        }
+
+        if (is_callable($options['formatter'])) {
+            return $options['formatter']($this->getContext(), $options);
+        }
+
+        $action = $this->action($action, $options);
+
+        if ($action) {
+            return $action['output'];
+        }
+    }
+
+    /**
      * Get the current field value
      *
      * @param array $data The raw entity data array.
@@ -247,6 +282,74 @@ class CrudViewHelper extends Helper
         }
 
         return false;
+    }
+
+    /**
+     * Returns a formatted action output for a given action
+     *
+     * @param string $field Name of action.
+     * @return mixed Array of data to output, false if no match found
+     */
+    public function action($field, $options)
+    {
+        $data = $this->getContext();
+        if (empty($data)) {
+            return false;
+        }
+
+        $primaryKey = $this->getViewVar('primaryKey');
+
+        $options += ['method' => 'GET'];
+
+        if ((empty($options['url']['controller']) || $this->request->controller === $options['url']['controller']) &&
+            (!empty($options['url']['action']) && $this->request->action === $options['url']['action'])
+        ) {
+            return false;
+        }
+
+        $linkOptions = ['class' => 'btn btn-default'];
+        if (isset($options['options'])) {
+            $linkOptions = $options['options'] + $linkOptions;
+        }
+
+        if ($options['method'] === 'DELETE') {
+            $linkOptions += [
+                'block' => 'action_link_forms',
+                'confirm' => __d('crud', 'Are you sure you want to delete record #{0}?', [$data->{$primaryKey}])
+            ];
+        }
+
+        if ($options['method'] !== 'GET') {
+            $linkOptions += [
+                'method' => $options['method']
+            ];
+        }
+
+        if (!empty($options['callback'])) {
+            $callback = $options['callback'];
+            unset($options['callback']);
+            $options['options'] = $linkOptions;
+            return ['output' => $callback($options, !empty($data) ? $data : null, $this)];
+        }
+
+        $url = $options['url'];
+        if (!empty($data)) {
+            $url[] = $data->{$primaryKey};
+        }
+
+        if ($options['method'] !== 'GET') {
+            return ['output' => $this->Form->postLink(
+                $options['title'],
+                $url,
+                $linkOptions
+            )];
+        }
+
+        return ['output' => $this->Html->link(
+            $options['title'],
+            $url,
+            $linkOptions
+        )];
     }
 
     /**

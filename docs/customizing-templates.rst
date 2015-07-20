@@ -108,6 +108,24 @@ Element files will have available at least the following variables:
 * ``$context``: The entity from which the value came from
 * ``$options``: The array of options associated to the field as passed in ``scaffold.fields``
 
+Formatting actions
+------------------
+
+Similarly, ``CrudView`` also allows you to customize actions using a callable or an element.
+
+In addition, you can even conditionally display actions:
+
+    <?php
+    ...
+    $action->config('scaffold.extra_actions', [
+      ...
+      'delete' => [
+        'condition' => function ($entity) {
+          return $entity->active === false; // Only show delete icon for inactive accounts.
+        }
+      ]
+    ]);
+
 Changing Field Header or Label Names
 ------------------------------------
 

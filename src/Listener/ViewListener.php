@@ -338,13 +338,13 @@ class ViewListener extends BaseListener
             $scope = isset($config['scope']) ? $config['scope'] : 'entity';
             $method = isset($config['method']) ? $config['method'] : 'GET';
 
-            ${$scope}[$actionName] = [
+            ${$scope}[$actionName] = Hash::merge($config, [
                 'title' => Inflector::humanize($actionName),
                 'url' => [
                     'action' => $actionName
                 ],
                 'method' => $method,
-            ];
+            ]);
         }
 
         return compact('table', 'entity');
