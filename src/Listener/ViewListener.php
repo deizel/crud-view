@@ -360,7 +360,7 @@ class ViewListener extends BaseListener
         $actions = $this->_action()->config('scaffold.actions') ?: $this->_crud()->config('actions');
         $extraActions = $this->_action()->config('scaffold.extra_actions') ?: [];
 
-        $allActions = array_merge(
+        $allActions = Hash::merge(
             $this->_normalizeActions($actions),
             $this->_normalizeActions($extraActions)
         );
