@@ -5,7 +5,12 @@ use Crud\TestSuite\IntegrationTestCase;
 
 class BlogsControllerTest extends IntegrationTestCase {
 
-    public function testIndex() {
+    public $fixtures = ['plugin.crud_view.blogs'];
 
+    public function testIndex()
+    {
+        $this->get('/blogs/index');
+        $this->assertResponseSuccess();
+        $this->assertResponseContains('<title>Blogs</title>');
     }
 }

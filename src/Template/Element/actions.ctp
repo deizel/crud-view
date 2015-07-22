@@ -67,7 +67,10 @@ foreach ($actions as $name => $config) {
             continue;
         }
         $config = $links[$action];
-        $config['options']['class'] = ['btn btn-default'];
+
+        if (!is_string($config)) {
+            $config['options']['class'] = ['btn btn-default'];
+        }
 
         echo $this->element('action-button', ['config' => $config]);
     }

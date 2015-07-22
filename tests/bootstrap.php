@@ -73,6 +73,7 @@ Cake\Core\Configure::write('Session', [
 
 Cake\Core\Plugin::load('Crud', ['path' => ROOT . DS, 'autoload' => true]);
 Cake\Core\Plugin::load('CrudView', ['path' => ROOT . DS, 'autoload' => true]);
+Cake\Core\Plugin::load('BootstrapUI', ['path' => ROOT . DS, 'autoload' => true]);
 
 Cake\Routing\DispatcherFactory::add('Routing');
 Cake\Routing\DispatcherFactory::add('ControllerFactory');

@@ -11,15 +11,17 @@ class BlogsController extends Controller
 
     public $paginate = ['limit' => 3];
 
-    public $components = [
-        'RequestHandler',
-        'Flash',
-        'Crud.Crud' => [
+    public function initialize()
+    {
+        $this->viewClass = 'CrudView\View\CrudView';
+        $this->loadComponent('RequestHandler');
+        $this->loadComponent('Flash');
+        $this->loadComponent('Crud.Crud', [
             'actions' => [
                 'Crud.Index',
+                'Crud.View',
                 'Crud.Add',
                 'Crud.Edit',
-                'Crud.View',
                 'Crud.Delete',
                 'Crud.Lookup',
                 'deleteAll' => [
@@ -36,10 +38,11 @@ class BlogsController extends Controller
                 ],
             ],
             'listeners' => [
-                'Crud.Api',
+                'CrudView.View',
+                'Crud.Redirect',
                 'Crud.RelatedModels',
-                'Crud.Redirect'
-            ]
-        ]
-    ];
+                'CrudView.Search',
+            ],
+        ]);
+    }
 }
