@@ -35,6 +35,7 @@
         "friendsofcake/bootstrap-ui": "~0.3"
     },
     "require-dev": {
+        "phpunit/phpunit": "3.7.33",
         "friendsofcake/cakephp-test-utilities": "dev-master"
     },
     "autoload": {
