@@ -62,6 +62,29 @@ class BlogsControllerTest extends IntegrationTestCase {
         $this->assertResponseContains('<a href="/blogs" class="btn btn-default" role="button">Back</a>');
     }
 
+    public function testEdit()
+    {
+        $this->get('/blogs/edit/1');
+        $this->assertResponseSuccess();
+        $this->assertResponseContains('<title>Edit Blog #1: 1st post</title>');
+        $this->assertResponseContains('<a href="/blogs" class="btn btn-default">Index</a>');
+        $this->assertCommon();
+
+        $this->assertResponseContains('<div class="scaffold-action scaffold-action-edit scaffold-controller-blogs scaffold-blogs-edit">');
+        $this->assertResponseContains('<h2>Edit Blog #1: 1st post</h2>');
+
+        $this->assertResponseContains('<form method="post" role="form" action="/blogs/edit/1">');
+
+        $this->assertResponseContains('<label for="is-active"><input type="checkbox" name="is_active" value="1" id="is-active" checked="checked">Is Active</label>');
+        $this->assertResponseContains('<label class="control-label" for="name">Name</label><input type="text" name="name" maxlength="255" id="name" class="form-control" value="1st post">');
+        $this->assertResponseContains('<label for="body">Body</label><textarea name="body" id="body" class="form-control" rows="5">1st post body</textarea>');
+
+        $this->assertResponseContains('<button class="btn btn-primary" name="_save" type="submit">Save</button>');
+        $this->assertResponseContains('<button class="btn btn-success btn-save-continue" name="_edit" type="submit">Save & continue editing</button>');
+        $this->assertResponseContains('<button class="btn btn-success" name="_add" type="submit">Save & create new</button>');
+        $this->assertResponseContains('<a href="/blogs" class="btn btn-default" role="button">Back</a>');
+    }
+
     public function assertCommon()
     {
         $this->assertResponseContains('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.css"/>');
