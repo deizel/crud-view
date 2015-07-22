@@ -12,6 +12,7 @@ class BlogsControllerTest extends IntegrationTestCase {
         $this->get('/blogs/index');
         $this->assertResponseSuccess();
         $this->assertResponseContains('<title>Blogs</title>');
+        $this->assertResponseContains('<a href="/blogs/add" class="btn btn-default">Add</a>');
         $this->assertCommon();
 
         $this->assertResponseContains('<div class="scaffold-action scaffold-action-index scaffold-controller-blogs scaffold-blogs-index">');
@@ -27,6 +28,8 @@ class BlogsControllerTest extends IntegrationTestCase {
         $this->get('/blogs/view/1');
         $this->assertResponseSuccess();
         $this->assertResponseContains('<title>View Blog #1: 1st post</title>');
+        $this->assertResponseContains('<a href="/blogs" class="btn btn-default">Index</a>');
+        $this->assertResponseContains('<a href="/blogs/add" class="btn btn-default">Add</a>');
         $this->assertCommon();
 
         $this->assertResponseContains('<div class="scaffold-action scaffold-action-view scaffold-controller-blogs scaffold-blogs-view">');
@@ -34,6 +37,29 @@ class BlogsControllerTest extends IntegrationTestCase {
         $this->assertResponseContains('<tr><th>Is Active</th><td><span class="label label-success">Yes</span>&nbsp;</td></tr>');
         $this->assertResponseContains('<tr><th>Name</th><td><a href="/blogs/view/1">1st post</a>&nbsp;</td></tr>');
         $this->assertResponseContains('<tr><th>Body</th><td>1st post body&nbsp;</td></tr>');
+    }
+
+    public function testAdd()
+    {
+        $this->get('/blogs/add');
+        $this->assertResponseSuccess();
+        $this->assertResponseContains('<title>Add Blog</title>');
+        $this->assertResponseContains('<a href="/blogs" class="btn btn-default">Index</a>');
+        $this->assertCommon();
+
+        $this->assertResponseContains('<div class="scaffold-action scaffold-action-add scaffold-controller-blogs scaffold-blogs-add">');
+        $this->assertResponseContains('<h2>Add Blog</h2>');
+
+        $this->assertResponseContains('<form method="post" role="form" action="/blogs/add">');
+
+        $this->assertResponseContains('<label for="is-active"><input type="checkbox" name="is_active" value="1" id="is-active">Is Active</label>');
+        $this->assertResponseContains('<label class="control-label" for="name">Name</label><input type="text" name="name" maxlength="255" id="name" class="form-control">');
+        $this->assertResponseContains('<label for="body">Body</label><textarea name="body" id="body" class="form-control" rows="5"></textarea>');
+
+        $this->assertResponseContains('<button class="btn btn-primary" name="_save" type="submit">Save</button>');
+        $this->assertResponseContains('<button class="btn btn-success btn-save-continue" name="_edit" type="submit">Save & continue editing</button>');
+        $this->assertResponseContains('<button class="btn btn-success" name="_add" type="submit">Save & create new</button>');
+        $this->assertResponseContains('<a href="/blogs" class="btn btn-default" role="button">Back</a>');
     }
 
     public function assertCommon()
@@ -50,7 +76,6 @@ class BlogsControllerTest extends IntegrationTestCase {
         $this->assertResponseContains('<script src="https://cdn.jsdelivr.net/jquery.dirtyforms/1.2.2/jquery.dirtyforms.min.js"></script>');
         $this->assertResponseContains('<a class="navbar-brand" href="/">Crud View</a>');
         $this->assertResponseContains('<li><a href="/blogs">Blogs</a></li>');
-        $this->assertResponseContains('<a href="/blogs/add" class="btn btn-default">Add</a>');
         $this->assertResponseContains('<a href="/blogs/lookup" class="btn btn-default">Lookup</a>'); // @todo This shouldn't appear.
     }
 }
