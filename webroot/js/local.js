@@ -2,7 +2,7 @@ $(document).on('ready', function() {
 
     var bulkActionForm = $('.bulk-actions');
     if (bulkActionForm.length) {
-        bulkActionForm.submit(function (e) {
+        bulkActionForm.submit(function(e) {
             var action = $('.bulk-actions .bulk-action-submit select').val();
             if (!action) {
                 return e.preventDefault();
@@ -22,7 +22,7 @@ $(document).on('ready', function() {
 
     $('select:not(.autocomplete, .no-selectize)').selectize({plugins: ['remove_button']});
 
-    $('input.autocomplete, select.autocomplete').each(function (i, e) {
+    $('input.autocomplete, select.autocomplete').each(function(i, e) {
         e = $(e);
         e.selectize({
             maxItems: 1,
@@ -33,7 +33,7 @@ $(document).on('ready', function() {
                     return '<div class="create">🔍 <strong> ' + escape(data.input) + '</strong>&hellip;</div>';
                 }
             },
-            load: function (query, callback) {
+            load: function(query, callback) {
                 var data = {};
 
                 data[e.data('filter-field') || e.attr('name')] = query;
@@ -49,7 +49,7 @@ $(document).on('ready', function() {
                         callback();
                     },
                     success: function(res) {
-                        callback($.map(res.data, function (name, id) {
+                        callback($.map(res.data, function(name, id) {
                             return {value: id, text: name};
                         }));
                     }
@@ -64,10 +64,10 @@ $(document).on('ready', function() {
     $('.dropdown-toggle').dropdown();
 
     // recommended hack to get dropdowns correctly work inside responsive table
-    $('.table-responsive').on('show.bs.dropdown', function () {
-        $('.table-responsive').css( "overflow", "inherit" );
+    $('.table-responsive').on('show.bs.dropdown', function() {
+        $('.table-responsive').css('overflow', 'inherit');
     });
-    $('.table-responsive').on('hide.bs.dropdown', function () {
-        $('.table-responsive').css( "overflow", "auto" );
+    $('.table-responsive').on('hide.bs.dropdown', function() {
+        $('.table-responsive').css('overflow', 'auto');
     })
 });
