@@ -3,7 +3,8 @@ namespace CrudView\Test\Controller;
 
 use Crud\TestSuite\IntegrationTestCase;
 
-class BlogsControllerTest extends IntegrationTestCase {
+class BlogsControllerTest extends IntegrationTestCase
+{
 
     public $fixtures = ['plugin.crud_view.blogs'];
 
